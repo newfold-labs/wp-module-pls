@@ -2,6 +2,7 @@
 
 namespace NewfoldLabs\WP\Module\PLS;
 
+use NewfoldLabs\WP\Module\PLS\RestApi\RestApi;
 use NewfoldLabs\WP\ModuleLoader\Container;
 
 /**
@@ -24,6 +25,8 @@ class PLS {
 		// We're trying to avoid adding more stuff to this.
 		$this->container = $container;
 
-		do_action( 'qm/debug', 'Hello from the PLS module!' );
+		if ( Permissions::rest_is_authorized_admin() ) {
+			new RestApi();
+		}
 	}
 }
