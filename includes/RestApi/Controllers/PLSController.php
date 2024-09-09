@@ -1,6 +1,6 @@
 <?php
 
-namespace NewfoldLabs\WP\Module\PLS\RestApi\Controller\PLSController;
+namespace NewfoldLabs\WP\Module\PLS\RestApi\Controllers;
 
 use NewfoldLabs\WP\Module\PLS\Permissions;
 use NewfoldLabs\WP\Module\PLS\Utilities\PLSUtility;
