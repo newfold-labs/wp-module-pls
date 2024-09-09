@@ -73,7 +73,8 @@ class HiiveUtility {
 		$args = array(
 			'method'  => $this->method,
 			'headers' => array(
-				'Content-Type' => 'application/json',
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bearer ' . HiiveConnection::get_auth_token(),
 			),
 			'timeout' => 30,
 		);
