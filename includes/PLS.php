@@ -3,6 +3,7 @@
 namespace NewfoldLabs\WP\Module\PLS;
 
 use NewfoldLabs\WP\Module\PLS\RestApi\RestApi;
+use NewfoldLabs\WP\Module\PLS\WPCLI\WPCLI;
 use NewfoldLabs\WP\ModuleLoader\Container;
 
 /**
@@ -28,5 +29,7 @@ class PLS {
 		if ( Permissions::rest_is_authorized_admin() ) {
 			new RestApi();
 		}
+
+		new WPCLI();
 	}
 }

@@ -19,7 +19,8 @@ class PLSUtility {
 	public static function provision_license( $plugin_slug ) {
 		// TODO: Replace this dummy with an actual API call to Hiive for provisioning a new license.
 		return array(
-			'status' => 'new',
+			'status'      => 'new',
+			'downloadUrl' => 'https://hiive.cloud/workers/plugin-downloads/yith-paypal-payments-for-woocommerce',
 		);
 	}
 
