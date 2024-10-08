@@ -74,7 +74,7 @@ class PLSController extends \WP_REST_Controller {
 	 */
 	public function get_args() {
 		return array(
-			'plugin_slug' => array(
+			'pluginSlug' => array(
 				'required'          => true,
 				'validate_callback' => function ( $param ) {
 					return is_string( $param ) && ! empty( $param );
@@ -91,7 +91,7 @@ class PLSController extends \WP_REST_Controller {
 	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function create_license( $request ) {
-		$plugin_slug = sanitize_text_field( $request->get_param( 'plugin_slug' ) );
+		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
 
 		$response = PLSUtility::provision_license( $plugin_slug );
 

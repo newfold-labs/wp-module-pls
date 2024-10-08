@@ -1,5 +1,7 @@
 <?php
 
+namespace NewfoldLabs\WP\Module\PLS\Utilities;
+
 use NewfoldLabs\WP\Module\Data\HiiveConnection;
 
 /**
