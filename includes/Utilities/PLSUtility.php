@@ -134,7 +134,7 @@ class PLSUtility {
 	}
 
 	/**
-	 * Activates a license by plugin slug via the Hiive PLS API, including domain and email.
+	 * Activates a license by plugin slug via the Hiive PLS API.
 	 *
 	 * @param string $plugin_slug The plugin slug.
 	 *
