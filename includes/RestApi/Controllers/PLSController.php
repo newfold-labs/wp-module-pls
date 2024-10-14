@@ -27,6 +27,21 @@ class PLSController extends \WP_REST_Controller {
 	protected $rest_base = 'license';
 
 	/**
+	 * Instance of the PLSUtility class.
+	 *
+	 * @var PLSUtility
+	 */
+	protected $pls_utility;
+
+	/**
+	 * Constructor for the PLSController class.
+	 */
+	public function __construct() {
+		// Instantiate PLSUtility for license handling
+		$this->pls_utility = new PLSUtility();
+	}
+
+	/**
 	 * Registers the routes for the objects of the controller.
 	 */
 	public function register_routes() {
@@ -93,7 +108,8 @@ class PLSController extends \WP_REST_Controller {
 	public function create_license( $request ) {
 		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
 
-		$response = PLSUtility::provision_license( $plugin_slug );
+		// Use the instance of PLSUtility to provision a new license
+		$response = $this->pls_utility->provision_license( $plugin_slug );
 
 		if ( is_wp_error( $response ) ) {
 			return new \WP_REST_Response(
@@ -115,9 +131,10 @@ class PLSController extends \WP_REST_Controller {
 	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function get_license_status( $request ) {
-		$plugin_slug = sanitize_text_field( $request->get_param( 'plugin_slug' ) );
+		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
 
-		$license_status = PLSUtility::retrieve_license_status( $plugin_slug );
+		// Use the instance of PLSUtility to retrieve license status
+		$license_status = $this->pls_utility->retrieve_license_status( $plugin_slug );
 		if ( is_wp_error( $license_status ) ) {
 			return new \WP_REST_Response(
 				array(
@@ -138,9 +155,10 @@ class PLSController extends \WP_REST_Controller {
 	 * @return \WP_REST_Response|WP_Error
 	 */
 	public function activate_license( $request ) {
-		$plugin_slug = sanitize_text_field( $request->get_param( 'plugin_slug' ) );
+		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
 
-		$activation_result = PLSUtility::activate_license( $plugin_slug );
+		// Use the instance of PLSUtility to activate the license
+		$activation_result = $this->pls_utility->activate_license( $plugin_slug );
 		if ( is_wp_error( $activation_result ) ) {
 			return new \WP_REST_Response(
 				array(
