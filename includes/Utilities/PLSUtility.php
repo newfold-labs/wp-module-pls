@@ -44,25 +44,30 @@ class PLSUtility {
 	 * @param array $storage_map The license storage map to be encrypted and stored.
 	 */
 	public function store_license_storage_map( $storage_map ) {
+		// Initialize the encryption class and encrypt the storage map before storing it.
 		$encryption     = new Encryption();
 		$encrypted_data = $encryption->encrypt( wp_json_encode( $storage_map ) );
+		// Store the encrypted data in the WordPress options table.
 		update_option( $this->license_storage_map_option_name, $encrypted_data );
 	}
 
 	/**
 	 * Retrieves the license storage map with decryption.
 	 *
-	 * @return array|false The decrypted license storage map, or false on failure.
+	 * @return array The decrypted license storage map, or an empty array on failure.
 	 */
 	public function retrieve_license_storage_map() {
+		// Initialize the encryption class and retrieve the encrypted storage map from WordPress options.
 		$encryption     = new Encryption();
 		$encrypted_data = get_option( $this->license_storage_map_option_name );
+		// Return an empty array if no encrypted data is found.
 		if ( ! $encrypted_data ) {
-			return false;
+			return array();
 		}
+		// Decrypt the stored data and return it as an associative array.
 		$decrypted_data = $encryption->decrypt( $encrypted_data );
 		if ( ! $decrypted_data ) {
-			return false;
+			return array();
 		}
 		return json_decode( $decrypted_data, true );
 	}
@@ -77,41 +82,41 @@ class PLSUtility {
 	 * @return array|WP_Error License data or WP_Error on failure.
 	 */
 	public function provision_license( $plugin_slug, $provider ) {
-		// Retrieve the existing license storage map
+		// Retrieve the existing license storage map.
 		$storage_map = $this->retrieve_license_storage_map();
 
-		// Check if a license storage map already exists for the given plugin slug
+		// Check if a license already exists for the plugin slug.
 		if ( isset( $storage_map[ $plugin_slug ] ) ) {
-			// Get the license ID storage name from the storage map if available
+			// If available, get the license ID storage name from the storage map.
 			$license_id_storage_name = isset( $storage_map[ $plugin_slug ]['licenseIdStorageName'] )
 			? $storage_map[ $plugin_slug ]['licenseIdStorageName'] : null;
 
-			// If the license ID storage name is missing, retrieve it from Providers based on the provider name
+			// If the license ID storage name is missing, retrieve it from Providers using the provider name.
 			if ( ! $license_id_storage_name ) {
 				$provider_instance       = new Providers();
 				$license_id_storage_name = $provider_instance->get_license_id_option_name( $provider, $plugin_slug );
 			}
 
-			// Check if the license ID exists in the WordPress options table
+			// Check if the license ID is stored in WordPress options.
 			$license_id = get_option( $license_id_storage_name );
 			if ( $license_id ) {
-				// Retrieve the activation key storage name from the storage map if available
+				// Retrieve the activation key storage name if available in the storage map.
 				$activation_key_storage_name = isset( $storage_map[ $plugin_slug ]['activationKeyStorageName'] )
 				? $storage_map[ $plugin_slug ]['activationKeyStorageName'] : null;
 
-				// If the activation key storage name is missing, retrieve it from Providers
+				// If the activation key storage name is missing, retrieve it from Providers.
 				if ( ! $activation_key_storage_name ) {
-					$activation_key_storage_name = $provider_instance->get_activation_key_option_name( $provider, $plugin_slug );
+					$activation_key_storage_name = $provider_instance->get_activation_key_option_name( $provider, $license_id );
 				}
 
-				// Retrieve the activation key from the WordPress options table
+				// Retrieve the activation key from WordPress options.
 				$activation_key = get_option( $activation_key_storage_name );
 
-				// If the activation key exists, check if the license is valid
+				// Check if the activation key exists and if the license is valid.
 				if ( $activation_key ) {
 					$is_valid = $this->check_license_status( $plugin_slug, $activation_key );
 
-					// If the license is valid, return the license data from the storage map
+					// Return the stored license data if the license is valid.
 					if ( $is_valid ) {
 						$storage_map[ $plugin_slug ]['licenseId'] = $license_id;
 						return $storage_map[ $plugin_slug ];
@@ -120,31 +125,31 @@ class PLSUtility {
 			}
 		}
 
-		// If no license is found, send a request to the PLS API to provision a new license
+		// If no valid license is found, send a request to provision a new license via the PLS API.
 		$endpoint = '/sites/v2/pls/license';
 		$body     = array(
 			'pluginSlug' => $plugin_slug,
 		);
 
-		// Send the API request to provision a new license
+		// Send the API request to provision a new license.
 		$hiive_request = new HiiveUtility( $endpoint, $body, 'POST' );
 		$response      = $hiive_request->send_request();
 
-		// If the API request returns an error, return the error
+		// Return an error if the API request fails.
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
-		// Parse the response from the API
+		// Parse the response and process the license storage data.
 		$response_body = json_decode( $response, true );
 
-		// Check if the storage_map keys have values, else fallback to Providers class
+		// If the storage map has values in the response, use them, otherwise fall back to Providers.
 		$provider_instance    = new Providers();
 		$storage_map_response = isset( $response_body['storage_map'] ) ? $response_body['storage_map'] : array();
 
 		$activation_key_storage_name = ! empty( $storage_map_response['activation_key'] )
 		? $storage_map_response['activation_key']
-		: $provider_instance->get_activation_key_option_name( $provider, $plugin_slug );
+		: $provider_instance->get_activation_key_option_name( $provider, $response_body['license_id'] );
 
 		$license_id_storage_name = ! empty( $storage_map_response['license_id'] )
 		? $storage_map_response['license_id']
@@ -154,10 +159,10 @@ class PLSUtility {
 		? $storage_map_response['method']
 		: $provider_instance->get_storage_method( $provider );
 
-		// Store the license ID in the WordPress options table
+		// Store the newly provisioned license ID in WordPress options.
 		update_option( $license_id_storage_name, $response_body['license_id'] );
 
-		// Prepare the new storage map data
+		// Prepare the new license storage map data.
 		$storage_map_data = array(
 			'downloadUrl'              => $response_body['download_url'],
 			'basename'                 => $response_body['basename'],
@@ -167,11 +172,11 @@ class PLSUtility {
 			'storageMethod'            => $storage_method,
 		);
 
-		// Save the new storage map data
+		// Save the new license storage map data.
 		$storage_map[ $plugin_slug ] = $storage_map_data;
 		$this->store_license_storage_map( $storage_map );
 
-		// Return the new license data
+		// Return the newly provisioned license data.
 		return array(
 			'licenseId'                => $response_body['license_id'],
 			'downloadUrl'              => $response_body['download_url'],
@@ -183,18 +188,17 @@ class PLSUtility {
 
 	/**
 	 * Activates a license by plugin slug via the PLS API.
-	 * If an activation key exists and is valid, it returns an error.
+	 * If an activation key exists and is valid, it returns it.
 	 * Otherwise, it sends a request to the PLS API to activate the license.
 	 *
 	 * @param string $plugin_slug The plugin slug for which to activate the license.
-	 *
 	 * @return string|WP_Error Activation key or WP_Error on failure.
 	 */
 	public function activate_license( $plugin_slug ) {
-		// Retrieve the stored storage map for the plugin.
+		// Retrieve the stored license storage map for the plugin.
 		$storage_map = $this->retrieve_license_storage_map();
 
-		// If no license storage map exists for the given plugin slug, return an error.
+		// Validate if a storage map exists for the provided plugin slug.
 		if ( ! isset( $storage_map[ $plugin_slug ] ) ) {
 			return new \WP_Error(
 				'nfd_pls_error',
@@ -202,79 +206,99 @@ class PLSUtility {
 			);
 		}
 
-		// Extract the storage data for the plugin slug.
 		$storage_data = $storage_map[ $plugin_slug ];
 
-		// If the activation key storage or license ID storage is not set, retrieve it from the Providers class.
-		if ( ! isset( $storage_data['activationKeyStorageName'], $storage_data['licenseIdStorageName'] ) ) {
-			if ( isset( $storage_data['provider'] ) ) {
-				$provider_instance                        = new Providers();
-				$storage_data['activationKeyStorageName'] = $provider_instance->get_activation_key_option_name( $storage_data['provider'], $plugin_slug );
-				$storage_data['licenseIdStorageName']     = $provider_instance->get_license_id_option_name( $storage_data['provider'], $plugin_slug );
+		// Retrieve the license ID and activation key storage names, or retrieve them from Providers if missing.
+		if ( empty( $storage_data['activationKeyStorageName'] ) ) {
+			if ( ! isset( $storage_data['provider'] ) ) {
+				return new \WP_Error(
+					'nfd_pls_error',
+					__( 'Provider is not set in the storage data.', 'wp-module-pls' )
+				);
 			}
+
+			$provider_instance = new Providers();
+
+			// If licenseIdStorageName is not set, retrieve it using the provider and plugin slug.
+			if ( empty( $storage_data['licenseIdStorageName'] ) ) {
+				$storage_data['licenseIdStorageName'] = $provider_instance->get_license_id_option_name( $storage_data['provider'], $plugin_slug );
+			}
+
+			// Retrieve the license ID from WordPress options.
+			$license_id = get_option( $storage_data['licenseIdStorageName'] );
+			if ( ! $license_id ) {
+				return new \WP_Error(
+					'nfd_pls_error',
+					__( 'License ID not found for the plugin.', 'wp-module-pls' )
+				);
+			}
+
+			// Set the activationKeyStorageName if missing, using the provider and license ID.
+			$storage_data['activationKeyStorageName'] = $provider_instance->get_activation_key_option_name( $storage_data['provider'], $license_id );
+			// Update the storage map with the newly retrieved activationKeyStorageName.
+			$storage_map[ $plugin_slug ] = $storage_data;
+			$this->store_license_storage_map( $storage_map );
 		}
 
-		// Retrieve the activation key using the storage name in the storage map.
-		$activation_key_storage_name = $storage_data['activationKeyStorageName'];
-		$activation_key              = get_option( $activation_key_storage_name );
-
-		// If the activation key exists, check if it's valid.
-		if ( $activation_key ) {
-			$is_valid = $this->check_license_status( $plugin_slug, $activation_key );
-			// If the activation key is valid, return it.
-			if ( $is_valid ) {
-				return $activation_key;
-			}
+		// Retrieve the activation key from WordPress options.
+		$activation_key = get_option( $storage_data['activationKeyStorageName'] );
+		// Validate the activation key if it exists.
+		if ( $activation_key && $this->check_license_status( $plugin_slug, $activation_key ) ) {
+			// Return the valid activation key.
+			return $activation_key;
 		}
 
-		// Retrieve the license ID from the storage map.
-		$license_id_storage_name = $storage_data['licenseIdStorageName'];
-		$license_id              = get_option( $license_id_storage_name );
+		// If licenseIdStorageName is not set, retrieve it using the provider and plugin slug.
+		if ( empty( $storage_data['licenseIdStorageName'] ) ) {
+			$storage_data['licenseIdStorageName'] = $provider_instance->get_license_id_option_name( $storage_data['provider'], $plugin_slug );
+		}
+		// Retrieve the license ID from WordPress options.
+		$license_id = get_option( $storage_data['licenseIdStorageName'] );
+		if ( ! $license_id ) {
+			return new \WP_Error(
+				'nfd_pls_error',
+				__( 'License ID not found for the plugin.', 'wp-module-pls' )
+			);
+		}
 
-		$domain_name = get_home_url();
-		$email       = get_option( 'admin_email' );
-		$body        = array(
-			'domain_name' => $domain_name,
-			'email'       => $email,
+		// Prepare the request body for the activation API.
+		$body = array(
+			'domain_name' => get_home_url(),
+			'email'       => get_option( 'admin_email' ),
 		);
 
-		$endpoint = "{$this->base_url}/license/{$license_id}/activate";
-
-		// Send the request to the PLS API to activate the license.
+		// Send a request to the PLS API to activate the license.
 		$response = wp_remote_post(
-			$endpoint,
+			"{$this->base_url}/license/{$license_id}/activate",
 			array(
 				'body'    => wp_json_encode( $body ),
-				'headers' => array(
-					'Content-Type' => 'application/json',
-				),
+				'headers' => array( 'Content-Type' => 'application/json' ),
 				'timeout' => 30,
 			)
 		);
+
+		// Handle errors in the API response.
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
-		// Check the response code from the API. If it's not in the success range (200-299), return an error.
 		$response_code = wp_remote_retrieve_response_code( $response );
 		if ( $response_code < 200 || $response_code >= 300 ) {
-			$response_body = wp_remote_retrieve_body( $response );
 			return new \WP_Error(
 				'nfd_pls_error',
 				__( 'API returned a non-success status code: ', 'wp-module-pls' ) . $response_code
 			);
 		}
 
-		$response_body = wp_remote_retrieve_body( $response );
-		$response_data = json_decode( $response_body, true );
-
-		// If the activation key exists in the response, store it in the appropriate option.
+		// Parse the API response to get the activation key.
+		$response_data = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( isset( $response_data['data']['activation_key'] ) ) {
-			update_option( $activation_key_storage_name, $response_data['data']['activation_key'] );
+			// Store the activation key in WordPress options and return it.
+			update_option( $storage_data['activationKeyStorageName'], $response_data['data']['activation_key'] );
 			return $response_data['data']['activation_key'];
 		}
 
-		// If the API response does not contain the expected data, return an error.
+		// Handle unexpected response formats from the API.
 		return new \WP_Error(
 			'nfd_pls_error',
 			__( 'Unexpected response format from the API.', 'wp-module-pls' )
@@ -306,26 +330,37 @@ class PLSUtility {
 			// Extract the storage data for the given plugin slug.
 			$storage_data = $storage_map[ $plugin_slug ];
 
-			// Check if the activation key storage name exists in the storage data.
-			if ( ! isset( $storage_data['activationKeyStorageName'] ) ) {
-				// If the storage name is missing, check if the provider is available in the storage data.
-				if ( isset( $storage_data['provider'] ) ) {
-					// Retrieve the activation key storage name using the provider's method.
-					$provider_instance                        = new Providers();
-					$storage_data['activationKeyStorageName'] = $provider_instance->get_activation_key_option_name( $storage_data['provider'], $plugin_slug );
+			// Retrieve the activation key storage name if missing, using Providers.
+			if ( empty( $storage_data['activationKeyStorageName'] ) ) {
+				if ( ! isset( $storage_data['provider'] ) ) {
+					return false;
 				}
+
+				$provider_instance = new Providers();
+				if ( empty( $storage_data['licenseIdStorageName'] ) ) {
+					$storage_data['licenseIdStorageName'] = $provider_instance->get_license_id_option_name( $storage_data['provider'], $plugin_slug );
+				}
+
+				$license_id = get_option( $storage_data['licenseIdStorageName'] );
+				if ( ! $license_id ) {
+					return false;
+				}
+
+				$storage_data['activationKeyStorageName'] = $provider_instance->get_activation_key_option_name( $storage_data['provider'], $license_id );
+				$storage_map[ $plugin_slug ]              = $storage_data;
+				$this->store_license_storage_map( $storage_map );
 			}
 
 			// Retrieve the activation key from the stored option using the activation key storage name.
 			$activation_key = get_option( $storage_data['activationKeyStorageName'] );
 
-			// If the activation key is not found in the options, return false.
+			// If the activation key is not found, return false.
 			if ( ! $activation_key ) {
 				return false;
 			}
 		}
 
-		// Prepare the API request to check the activation key status using the retrieved or provided activation key.
+		// Prepare the API request to check the activation key status.
 		$response = wp_remote_get(
 			"{$this->base_url}/license/{$activation_key}/status",
 			array(
@@ -334,15 +369,13 @@ class PLSUtility {
 			)
 		);
 
-		// If the API request returns an error, return false.
+		// Handle errors in the API response.
 		if ( is_wp_error( $response ) ) {
 			return false;
 		}
 
-		// Parse the response to check the status of the activation key.
+		// Parse the response and return true if the activation key is valid.
 		$response_data = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		// Return true if the activation key is valid, otherwise return false.
 		return isset( $response_data['data']['valid'] ) && true === $response_data['data']['valid'];
 	}
 }
