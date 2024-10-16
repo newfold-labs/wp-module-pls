@@ -124,6 +124,7 @@ class PLSUtility {
 		$endpoint = '/sites/v2/pls/license';
 		$body     = array(
 			'pluginSlug' => $plugin_slug,
+			'providerName' => $provider,
 		);
 
 		// Send the API request to provision a new license
