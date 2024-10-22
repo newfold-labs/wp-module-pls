@@ -42,6 +42,13 @@ class Providers {
 					'method'         => 'wp_option',
 				),
 			),
+			// This fallback provider is used when we do not receive the storage map for any provider from Hiive after provisioning a license
+			'nfd'  => array(
+				'storage' => array(
+					'license_id'     => "nfd_module_pls_license_id_{$this->environment}_%s",
+					'activation_key' => "nfd_module_pls_activation_key_{$this->environment}_%s",
+				),
+			),
 		);
 	}
 
@@ -59,7 +66,7 @@ class Providers {
 			return sprintf( $this->providers[ $provider ]['storage'][ $type ], $identifier );
 		}
 
-		return false; // Provider or type not found.
+		return sprintf( $this->providers['nfd']['storage'][ $type ], $identifier );
 	}
 
 	/**
