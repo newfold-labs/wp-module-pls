@@ -70,7 +70,7 @@ class PLSUtility {
 		if ( ! $decrypted_data ) {
 			return array();
 		}
-		return json_decode( $decrypted_data, true );
+		return json_decode( $decrypted_data, true ) ?: array();
 	}
 
 	/**
