@@ -46,7 +46,7 @@ class Providers {
 			'nfd'  => array(
 				'storage' => array(
 					'license_id'     => "nfd_module_pls_license_id_{$this->environment}_%s",
-					'activation_key' => "nfd_module_pls_license_id_{$this->environment}_%s",
+					'activation_key' => "nfd_module_pls_activation_key_{$this->environment}_%s",
 				),
 			),
 		);
