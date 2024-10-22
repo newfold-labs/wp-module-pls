@@ -129,7 +129,7 @@ class PLSUtility {
 		// If no valid license is found, send a request to provision a new license via the PLS API.
 		$endpoint = '/sites/v2/pls/license';
 		$body     = array(
-			'pluginSlug' => $plugin_slug,
+			'pluginSlug'   => $plugin_slug,
 			'providerName' => $provider,
 		);
 
@@ -150,7 +150,7 @@ class PLSUtility {
 		$response_body = json_decode( $response, true );
 
 		// If the storage map has values in the response, use them, otherwise fall back to Providers.
-		$provider_instance    = new Providers();
+		$provider_instance = new Providers();
 
 		/**
 		 * @var array{method:string,activation_key?:string,license_id:string} $storage_map_response
