@@ -4,6 +4,7 @@ namespace NewfoldLabs\WP\Module\PLS\Utilities;
 
 use NewfoldLabs\WP\Module\Data\Helpers\Encryption;
 use NewfoldLabs\WP\Module\PLS\Data\Providers;
+use WP_Error;
 
 /**
  * Class PLSUtility
@@ -141,7 +142,9 @@ class PLSUtility {
 			return $response;
 		}
 
-		// Parse the response and process the license storage data.
+		/**
+		 * Parse the response and process the license storage data.
+		 *
 		$response_body = json_decode( $response, true );
 
 		// If the storage map has values in the response, use them, otherwise fall back to Providers.
@@ -195,13 +198,13 @@ class PLSUtility {
 	 * @param string $plugin_slug The plugin slug for which to activate the license.
 	 * @return string|WP_Error Activation key or WP_Error on failure.
 	 */
-	public function activate_license( $plugin_slug ) {
+	public function activate_license( string $plugin_slug ) {
 		// Retrieve the stored license storage map for the plugin.
 		$storage_map = $this->retrieve_license_storage_map();
 
 		// Validate if a storage map exists for the provided plugin slug.
 		if ( ! isset( $storage_map[ $plugin_slug ] ) ) {
-			return new \WP_Error(
+			return new WP_Error(
 				'nfd_pls_error',
 				__( 'No license storage map found for the specified plugin slug.', 'wp-module-pls' )
 			);
@@ -212,7 +215,7 @@ class PLSUtility {
 		// Retrieve the license ID and activation key storage names, or retrieve them from Providers if missing.
 		if ( empty( $storage_data['activationKeyStorageName'] ) ) {
 			if ( ! isset( $storage_data['provider'] ) ) {
-				return new \WP_Error(
+				return new WP_Error(
 					'nfd_pls_error',
 					__( 'Provider is not set in the storage data.', 'wp-module-pls' )
 				);
@@ -228,7 +231,7 @@ class PLSUtility {
 			// Retrieve the license ID from WordPress options.
 			$license_id = get_option( $storage_data['licenseIdStorageName'] );
 			if ( ! $license_id ) {
-				return new \WP_Error(
+				return new WP_Error(
 					'nfd_pls_error',
 					__( 'License ID not found for the plugin.', 'wp-module-pls' )
 				);
@@ -256,7 +259,7 @@ class PLSUtility {
 		// Retrieve the license ID from WordPress options.
 		$license_id = get_option( $storage_data['licenseIdStorageName'] );
 		if ( ! $license_id ) {
-			return new \WP_Error(
+			return new WP_Error(
 				'nfd_pls_error',
 				__( 'License ID not found for the plugin.', 'wp-module-pls' )
 			);
@@ -285,7 +288,7 @@ class PLSUtility {
 
 		$response_code = wp_remote_retrieve_response_code( $response );
 		if ( $response_code < 200 || $response_code >= 300 ) {
-			return new \WP_Error(
+			return new WP_Error(
 				'nfd_pls_error',
 				__( 'API returned a non-success status code: ', 'wp-module-pls' ) . $response_code
 			);
@@ -300,7 +303,7 @@ class PLSUtility {
 		}
 
 		// Handle unexpected response formats from the API.
-		return new \WP_Error(
+		return new WP_Error(
 			'nfd_pls_error',
 			__( 'Unexpected response format from the API.', 'wp-module-pls' )
 		);
