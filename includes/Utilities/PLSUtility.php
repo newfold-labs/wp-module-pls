@@ -55,7 +55,7 @@ class PLSUtility {
 	 *
 	 * @return array<string, array{licenseIdStorageName?:string,activationKeyStorageName?:string}> The decrypted license storage map, or an empty array on failure.
 	 */
-	public function retrieve_license_storage_map(): array {
+	public function retrieve_license_storage_map() {
 		// Initialize the encryption class and retrieve the encrypted storage map from WordPress options.
 		$encryption     = new Encryption();
 		$encrypted_data = get_option( $this->license_storage_map_option_name );
@@ -80,7 +80,7 @@ class PLSUtility {
 	 *
 	 * @return array{licenseId:string,downloadUrl:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}|WP_Error License data or WP_Error on failure.
 	 */
-	public function provision_license( string $plugin_slug, string $provider ) {
+	public function provision_license( $plugin_slug, $provider ) {
 		// Retrieve the existing license storage map.
 		$storage_map = $this->retrieve_license_storage_map();
 
