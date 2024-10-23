@@ -4,7 +4,6 @@ namespace NewfoldLabs\WP\Module\PLS\Utilities;
 
 use NewfoldLabs\WP\Module\Data\Helpers\Encryption;
 use NewfoldLabs\WP\Module\PLS\Data\Providers;
-
 /**
  * Class PLSUtility
  *
@@ -41,9 +40,9 @@ class PLSUtility {
 	/**
 	 * Stores the license storage map with encryption.
 	 *
-	 * @param array $storage_map The license storage map to be encrypted and stored.
+	 * @param array<string, array{downloadUrl:string,basename:string,provider:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}> $storage_map The license storage map to be encrypted and stored, keyed by plugin slug.
 	 */
-	public function store_license_storage_map( $storage_map ) {
+	public function store_license_storage_map( array $storage_map ) {
 		// Initialize the encryption class and encrypt the storage map before storing it.
 		$encryption     = new Encryption();
 		$encrypted_data = $encryption->encrypt( wp_json_encode( $storage_map ) );
@@ -54,7 +53,7 @@ class PLSUtility {
 	/**
 	 * Retrieves the license storage map with decryption.
 	 *
-	 * @return array The decrypted license storage map, or an empty array on failure.
+	 * @return array<string, array{licenseIdStorageName?:string,activationKeyStorageName?:string}> The decrypted license storage map, or an empty array on failure.
 	 */
 	public function retrieve_license_storage_map() {
 		// Initialize the encryption class and retrieve the encrypted storage map from WordPress options.
@@ -79,7 +78,7 @@ class PLSUtility {
 	 * @param string $plugin_slug The plugin slug for which the license is being provisioned.
 	 * @param string $provider The provider name.
 	 *
-	 * @return array|WP_Error License data or WP_Error on failure.
+	 * @return array{licenseId:string,downloadUrl:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}|WP_Error License data or WP_Error on failure.
 	 */
 	public function provision_license( $plugin_slug, $provider ) {
 		// Retrieve the existing license storage map.
@@ -128,7 +127,7 @@ class PLSUtility {
 		// If no valid license is found, send a request to provision a new license via the PLS API.
 		$endpoint = '/sites/v2/pls/license';
 		$body     = array(
-			'pluginSlug' => $plugin_slug,
+			'pluginSlug'   => $plugin_slug,
 			'providerName' => $provider,
 		);
 
@@ -141,11 +140,21 @@ class PLSUtility {
 			return $response;
 		}
 
-		// Parse the response and process the license storage data.
+		/**
+		 * Parse the response and process the license storage data.
+		 *
+		 * @var array{storage_map?:array,license_id?:string,download_url:string,basename:string} $response_body
+		 */
 		$response_body = json_decode( $response, true );
 
 		// If the storage map has values in the response, use them, otherwise fall back to Providers.
-		$provider_instance    = new Providers();
+		$provider_instance = new Providers();
+
+		/**
+		 * Storage map response from API containing method, activation key, and license ID.
+		 *
+		 * @var array{method:string,activation_key?:string,license_id:string} $storage_map_response
+		 */
 		$storage_map_response = isset( $response_body['storage_map'] ) ? $response_body['storage_map'] : array();
 
 		$activation_key_storage_name = ! empty( $storage_map_response['activation_key'] )
