@@ -26,10 +26,28 @@ class PLS {
 		// We're trying to avoid adding more stuff to this.
 		$this->container = $container;
 
+		\add_action( 'init', array( __CLASS__, 'load_text_domain' ), 100 );
+
 		if ( Permissions::rest_is_authorized_admin() ) {
 			new RestApi();
 		}
 
 		new WPCLI();
+	}
+
+
+	/**
+	 * Load text domain for Module
+	 *
+	 * @return void
+	 */
+	public static function load_text_domain() {
+
+		\load_plugin_textdomain(
+			'wp-module-pls',
+			false,
+			NFD_PLS_DIR . '/languages'
+		);
+
 	}
 }

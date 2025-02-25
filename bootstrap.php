@@ -14,6 +14,9 @@ if ( function_exists( 'add_action' ) ) {
 					'name'     => 'wp-module-pls',
 					'label'    => __( 'wp-module-pls', 'wp-module-pls' ),
 					'callback' => function ( Container $container ) {
+						if ( ! defined( 'NFD_PLS_DIR' ) ) {
+							define( 'NFD_PLS_DIR', __DIR__ );
+						}
 						new PLS( $container );
 					},
 					'isActive' => true,
