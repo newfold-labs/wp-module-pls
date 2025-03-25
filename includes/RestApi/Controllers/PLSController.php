@@ -95,6 +95,13 @@ class PLSController extends \WP_REST_Controller {
 					return is_string( $param ) && ! empty( $param );
 				},
 			),
+			'provider' => array(
+				'required'          => false,
+				'default'			=> 'nfd',
+				'validate_callback' => function ( $param ) {
+					return is_string( $param ) && ! empty( $param );
+				}
+			)
 		);
 	}
 
@@ -107,9 +114,10 @@ class PLSController extends \WP_REST_Controller {
 	 */
 	public function create_license( $request ) {
 		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
+		$provider    = sanitize_text_field( $request->get_param( 'provider' ) );
 
 		// Use the instance of PLSUtility to provision a new license
-		$response = $this->pls_utility->provision_license( $plugin_slug );
+		$response = $this->pls_utility->provision_license( $plugin_slug, $provider );
 
 		if ( is_wp_error( $response ) ) {
 			return new \WP_REST_Response(
@@ -134,15 +142,7 @@ class PLSController extends \WP_REST_Controller {
 		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
 
 		// Use the instance of PLSUtility to retrieve license status
-		$license_status = $this->pls_utility->retrieve_license_status( $plugin_slug );
-		if ( is_wp_error( $license_status ) ) {
-			return new \WP_REST_Response(
-				array(
-					'error' => $license_status->get_error_message(),
-				),
-				400
-			);
-		}
+		$license_status = $this->pls_utility->check_license_status( $plugin_slug ) ? 'License Valid' : 'License Invalid';
 
 		return new \WP_REST_Response( array( 'status' => $license_status ), 200 );
 	}
@@ -152,7 +152,7 @@ class PLSController extends \WP_REST_Controller {
 	 *
 	 * @param \WP_REST_Request $request The REST request.
 	 *
-	 * @return \WP_REST_Response|WP_Error
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function activate_license( $request ) {
 		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
