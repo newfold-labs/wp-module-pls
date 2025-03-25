@@ -95,13 +95,13 @@ class PLSController extends \WP_REST_Controller {
 					return is_string( $param ) && ! empty( $param );
 				},
 			),
-			'provider' => array(
+			'provider'   => array(
 				'required'          => false,
-				'default'			=> 'nfd',
+				'default'           => 'nfd',
 				'validate_callback' => function ( $param ) {
 					return is_string( $param ) && ! empty( $param );
-				}
-			)
+				},
+			),
 		);
 	}
 
