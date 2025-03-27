@@ -68,7 +68,7 @@ class PLS {
 		}
 
 		// Get the plugin slug.
-		$data = get_file_data(  WP_PLUGIN_DIR . '/' . $plugin_path, ['slug' => 'BH Slug'] );
+		$data = get_file_data( WP_PLUGIN_DIR . '/' . $plugin_path, array( 'slug' => 'BH Slug' ) );
 		if ( empty( $data['slug'] ) ) {
 			return $options;
 		}
@@ -81,7 +81,7 @@ class PLS {
 
 		$options['package'] = add_query_arg(
 			array(
-				'license-key' => isset( $license_mapping[ $slug ] ) ? get_option( $license_mapping[ $slug ]['licenseIdStorageName'], '' ) : '',
+				'license-key'    => isset( $license_mapping[ $slug ] ) ? get_option( $license_mapping[ $slug ]['licenseIdStorageName'], '' ) : '',
 				'activation-key' => isset( $license_mapping[ $slug ] ) ? get_option( $license_mapping[ $slug ]['activationKeyStorageName'], '' ) : '',
 			),
 			$hiive->get_request_url()
