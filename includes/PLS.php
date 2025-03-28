@@ -74,7 +74,7 @@ class PLS {
 		}
 
 		$slug  = $data['slug'];
-		$hiive = new HiiveUtility( "/plugins/v1/{$slug}/download" );
+		$hiive = new HiiveUtility( "/releases/v1/plugins/{$slug}/download" );
 
 		$pls_utility     = new PLSUtility();
 		$license_mapping = $pls_utility->retrieve_license_storage_map();
