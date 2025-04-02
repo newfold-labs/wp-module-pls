@@ -60,8 +60,8 @@ class HiiveUtility {
 	 * @return mixed|WP_Error The response from the API or a WP_Error if the request fails.
 	 */
 	public function send_request() {
-		// Construct the full URL by appending the endpoint to the base URL
-		$url = $this->api_base_url . $this->endpoint;
+
+		$url = $this->get_request_url();
 
 		// Check the connection to ensure the API is reachable
 		if ( ! HiiveConnection::is_connected() ) {
@@ -110,5 +110,15 @@ class HiiveUtility {
 
 		// Return the body of the response
 		return wp_remote_retrieve_body( $response );
+	}
+
+	/**
+	 * Return the request URL
+	 * Construct the full URL by appending the endpoint to the base URL
+	 *
+	 * @return string
+	 */
+	public function get_request_url() {
+		return $this->api_base_url . $this->endpoint;
 	}
 }
