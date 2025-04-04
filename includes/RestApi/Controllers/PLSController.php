@@ -142,7 +142,7 @@ class PLSController extends \WP_REST_Controller {
 		$plugin_slug = sanitize_text_field( $request->get_param( 'pluginSlug' ) );
 
 		// Use the instance of PLSUtility to retrieve license status
-		$license_status = $this->pls_utility->check_license_status( $plugin_slug ) ? 'License Valid' : 'License Invalid';
+		$license_status = $this->pls_utility->check_license_status( $plugin_slug ) ? __( 'License Valid', 'wp-module-pls' ) : __( 'License Invalid', 'wp-module-pls' );
 
 		return new \WP_REST_Response( array( 'status' => $license_status ), 200 );
 	}
