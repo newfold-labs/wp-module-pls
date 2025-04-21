@@ -1,0 +1,7 @@
+{
+  "name": "wp-module-pls",
+  "version": "1.1.1",
+  "devDependencies": {
+    "@wordpress/env": "^10.22.0"
+  }
+}
