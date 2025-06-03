@@ -43,3 +43,11 @@ msgstr "License ID not found for the plugin."
 #: includes/Utilities/PLSUtility.php:314
 msgid "Unexpected response format from the API."
 msgstr "Unexpected response format from the API."
+
+#: includes/RestApi/Controllers/PLSController.php:145
+msgid "License Valid"
+msgstr ""
+
+#: includes/RestApi/Controllers/PLSController.php:145
+msgid "License Invalid"
+msgstr ""
