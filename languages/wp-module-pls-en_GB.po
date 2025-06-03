@@ -9,9 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2025-02-13T10:54:39+00:00\n"
 "PO-Revision-Date: 2025-02-13 19:33+0530\n"
+"Language: en_GB\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wp-module-pls\n"
-"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: bootstrap.php:15
@@ -35,7 +35,8 @@ msgstr "No license storage map found for the specified plugin slug."
 msgid "Provider is not set in the storage data."
 msgstr "Provider is not set in the storage data."
 
-#: includes/Utilities/PLSUtility.php:242 includes/Utilities/PLSUtility.php:270
+#: includes/Utilities/PLSUtility.php:242
+#: includes/Utilities/PLSUtility.php:270
 msgid "License ID not found for the plugin."
 msgstr "License ID not found for the plugin."
 
