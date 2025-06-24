@@ -1,4 +1,4 @@
-name: Auto Translate
+name: Check for Updates to Translations
 
 on:
   push:
