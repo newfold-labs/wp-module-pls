@@ -2,3 +2,8 @@ node_modules
 vendor
 .DS_Store
 .vscode
+
+# WP-Browser / wpunit
+.env.testing
+tests/_output
+tests/_support/_generated
