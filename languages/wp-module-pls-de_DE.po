@@ -1,23 +1,24 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: newfold-labswp-module-staging\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-13T10:54:39+00:00\n"
+"PO-Revision-Date: 2025-02-19 14:40\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-13T10:54:39+00:00\n"
-"PO-Revision-Date: 2025-02-19 14:40\n"
-"Language: de_DE\n"
-"X-Generator: WP-CLI 2.11.0\n"
-"X-Domain: wp-module-pls\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: newfold-labswp-module-staging\n"
-"X-Crowdin-Project-ID: 764889\n"
-"X-Crowdin-Language: de\n"
 "X-Crowdin-File: wp-module-pls.pot\n"
 "X-Crowdin-File-ID: 26\n"
+"X-Crowdin-Language: de\n"
+"X-Crowdin-Project: newfold-labswp-module-staging\n"
+"X-Crowdin-Project-ID: 764889\n"
+"X-Domain: wp-module-pls\n"
+"X-Generator: WP-CLI 2.11.0\n"
 
 #: bootstrap.php:15
 msgid "wp-module-pls"
@@ -40,11 +41,18 @@ msgstr "Keine Lizenz-Speicherkarte für den angegebenen Plugin Slug."
 msgid "Provider is not set in the storage data."
 msgstr "Der Provider ist nicht in den Speicherdaten festgelegt."
 
-#: includes/Utilities/PLSUtility.php:242
-#: includes/Utilities/PLSUtility.php:270
+#: includes/Utilities/PLSUtility.php:242 includes/Utilities/PLSUtility.php:270
 msgid "License ID not found for the plugin."
 msgstr "Lizenz-ID für das Plugin nicht gefunden."
 
 #: includes/Utilities/PLSUtility.php:314
 msgid "Unexpected response format from the API."
 msgstr "Unerwartetes Antwortformat aus der API."
+
+#: includes/RestApi/Controllers/PLSController.php:145
+msgid "License Valid"
+msgstr "Lizenz gültig"
+
+#: includes/RestApi/Controllers/PLSController.php:145
+msgid "License Invalid"
+msgstr "Lizenz ungültig"

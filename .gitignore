@@ -1,5 +1,3 @@
-node_modules
-vendor
 .DS_Store
 .vscode
 
@@ -7,3 +5,9 @@ vendor
 .env.testing
 tests/_output
 tests/_support/_generated
+/node_modules
+/tests/_output
+/tests/_support/_generated
+/wordpress
+/wp-content
+vendor
