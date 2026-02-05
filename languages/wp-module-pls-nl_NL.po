@@ -17,42 +17,5 @@ msgstr ""
 "X-Crowdin-Language: nl\n"
 "X-Crowdin-Project: newfold-labswp-module-staging\n"
 "X-Crowdin-Project-ID: 764889\n"
-"X-Domain: wp-module-pls\n"
+"X-Domain: wp-module-coming-soon\n"
 "X-Generator: WP-CLI 2.11.0\n"
-
-#: bootstrap.php:15
-msgid "wp-module-pls"
-msgstr "wp-module-pls"
-
-#: includes/Utilities/HiiveUtility.php:70
-msgid "Failed to connect to the API"
-msgstr "Kan geen verbinding maken met de API"
-
-#: includes/Utilities/HiiveUtility.php:107
-#: includes/Utilities/PLSUtility.php:299
-msgid "API returned a non-success status code: "
-msgstr "API heeft een niet-succesvolle status code teruggegeven: "
-
-#: includes/Utilities/PLSUtility.php:215
-msgid "No license storage map found for the specified plugin slug."
-msgstr "Geen licentiekaart gevonden voor de opgegeven plugin slug."
-
-#: includes/Utilities/PLSUtility.php:226
-msgid "Provider is not set in the storage data."
-msgstr "Provider is niet ingesteld in opslaggegevens."
-
-#: includes/Utilities/PLSUtility.php:242 includes/Utilities/PLSUtility.php:270
-msgid "License ID not found for the plugin."
-msgstr "Licentienummer niet gevonden voor de plugin."
-
-#: includes/Utilities/PLSUtility.php:314
-msgid "Unexpected response format from the API."
-msgstr "Onverwacht antwoordformaat van de API."
-
-#: includes/RestApi/Controllers/PLSController.php:145
-msgid "License Valid"
-msgstr "Licentie geldig"
-
-#: includes/RestApi/Controllers/PLSController.php:145
-msgid "License Invalid"
-msgstr "Licentie ongeldig"

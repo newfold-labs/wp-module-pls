@@ -17,43 +17,5 @@ msgstr ""
 "X-Crowdin-Language: fr\n"
 "X-Crowdin-Project: newfold-labswp-module-staging\n"
 "X-Crowdin-Project-ID: 764889\n"
-"X-Domain: wp-module-pls\n"
+"X-Domain: wp-module-coming-soon\n"
 "X-Generator: WP-CLI 2.11.0\n"
-
-#: bootstrap.php:15
-msgid "wp-module-pls"
-msgstr "wp-module-pls"
-
-#: includes/Utilities/HiiveUtility.php:70
-msgid "Failed to connect to the API"
-msgstr "Impossible de se connecter à l'API"
-
-#: includes/Utilities/HiiveUtility.php:107
-#: includes/Utilities/PLSUtility.php:299
-msgid "API returned a non-success status code: "
-msgstr "API a retourné un code de statut non-succès : "
-
-#: includes/Utilities/PLSUtility.php:215
-msgid "No license storage map found for the specified plugin slug."
-msgstr ""
-"Aucune carte de stockage de licence trouvée pour le slug du plugin spécifié."
-
-#: includes/Utilities/PLSUtility.php:226
-msgid "Provider is not set in the storage data."
-msgstr "Le fournisseur n'est pas défini dans les données de stockage."
-
-#: includes/Utilities/PLSUtility.php:242 includes/Utilities/PLSUtility.php:270
-msgid "License ID not found for the plugin."
-msgstr "ID de licence introuvable pour le plugin."
-
-#: includes/Utilities/PLSUtility.php:314
-msgid "Unexpected response format from the API."
-msgstr "Format de réponse inattendu de l'API."
-
-#: includes/RestApi/Controllers/PLSController.php:145
-msgid "License Valid"
-msgstr "Licence valide"
-
-#: includes/RestApi/Controllers/PLSController.php:145
-msgid "License Invalid"
-msgstr "Licence invalide"
