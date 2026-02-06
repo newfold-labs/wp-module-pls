@@ -1,16 +1,15 @@
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-13T10:54:39+00:00\n"
-"PO-Revision-Date: 2025-02-13 19:33+0530\n"
 "Last-Translator: Vara Prasad Maruboina <varaprasad.maruboina@newfold.com>\n"
 "Language-Team: English (British) <(nothing)>\n"
-"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-02-13T10:54:39+00:00\n"
+"PO-Revision-Date: 2025-02-13 19:33+0530\n"
+"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: wp-module-pls\n"
 "X-Generator: WP-CLI 2.11.0\n"
@@ -36,7 +35,8 @@ msgstr "No license storage map found for the specified plugin slug."
 msgid "Provider is not set in the storage data."
 msgstr "Provider is not set in the storage data."
 
-#: includes/Utilities/PLSUtility.php:242 includes/Utilities/PLSUtility.php:270
+#: includes/Utilities/PLSUtility.php:242
+#: includes/Utilities/PLSUtility.php:270
 msgid "License ID not found for the plugin."
 msgstr "License ID not found for the plugin."
 

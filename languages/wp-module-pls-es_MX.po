@@ -1,16 +1,15 @@
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://github.com/newfold-labs/wp-module-pls/issues\n"
-"POT-Creation-Date: 2025-02-13T09:55:55+00:00\n"
-"PO-Revision-Date: 2025-05-07 15:33+0100\n"
 "Last-Translator: Carlos Rodriguez <carlos.rodriguez@newfold.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
-"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-02-13T09:55:55+00:00\n"
+"PO-Revision-Date: 2025-05-07 15:33+0100\n"
+"Language: es_MX\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: wp-module-pls\n"
 "X-Generator: WP-CLI 2.11.0\n"
@@ -30,15 +29,14 @@ msgstr "La API devolvió un código de estado no exitoso: "
 
 #: includes/Utilities/PLSUtility.php:215
 msgid "No license storage map found for the specified plugin slug."
-msgstr ""
-"No se encontró un mapa de almacenamiento de licencia para el identificador "
-"del plugin especificado."
+msgstr "No se encontró un mapa de almacenamiento de licencia para el identificador del plugin especificado."
 
 #: includes/Utilities/PLSUtility.php:226
 msgid "Provider is not set in the storage data."
 msgstr "El proveedor no está definido en los datos de almacenamiento."
 
-#: includes/Utilities/PLSUtility.php:242 includes/Utilities/PLSUtility.php:270
+#: includes/Utilities/PLSUtility.php:242
+#: includes/Utilities/PLSUtility.php:270
 msgid "License ID not found for the plugin."
 msgstr "ID de licencia no encontrada para el plugin."
 
