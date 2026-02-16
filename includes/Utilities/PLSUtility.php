@@ -43,11 +43,7 @@ class PLSUtility {
 	 * @param array<string, array{downloadUrl:string,basename:string,provider:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}> $storage_map The license storage map to be encrypted and stored, keyed by plugin slug.
 	 */
 	public function store_license_storage_map( array $storage_map ) {
-		// Initialize the encryption class and encrypt the storage map before storing it.
-		$encryption     = new Encryption();
-		$encrypted_data = $encryption->encrypt( wp_json_encode( $storage_map ) );
-		// Store the encrypted data in the WordPress options table.
-		update_option( $this->license_storage_map_option_name, $encrypted_data );
+		update_option( $this->license_storage_map_option_name, $storage_map );
 	}
 
 	/**
@@ -56,15 +52,21 @@ class PLSUtility {
 	 * @return array<string, array{licenseIdStorageName?:string,activationKeyStorageName?:string}> The decrypted license storage map, or an empty array on failure.
 	 */
 	public function retrieve_license_storage_map() {
-		// Initialize the encryption class and retrieve the encrypted storage map from WordPress options.
-		$encryption     = new Encryption();
-		$encrypted_data = get_option( $this->license_storage_map_option_name );
-		// Return an empty array if no encrypted data is found.
-		if ( ! $encrypted_data ) {
+
+		$stored_data = get_option( $this->license_storage_map_option_name );
+
+		if ( empty( $stored_data ) ) {
 			return array();
 		}
-		// Decrypt the stored data and return it as an associative array.
-		$decrypted_data = $encryption->decrypt( $encrypted_data );
+
+		if ( is_array( $stored_data ) ) {
+			return $stored_data;
+		}
+
+		// If not array, try decrypting
+		$encryption     = new Encryption();
+		$decrypted_data = $encryption->decrypt( $stored_data );
+
 		if ( ! $decrypted_data ) {
 			return array();
 		}
