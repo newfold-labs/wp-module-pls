@@ -38,7 +38,7 @@ class PLSUtility {
 	}
 
 	/**
-	 * Stores the license storage map with encryption.
+	 * Stores the license storage map.
 	 *
 	 * @param array<string, array{downloadUrl:string,basename:string,provider:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}> $storage_map The license storage map to be encrypted and stored, keyed by plugin slug.
 	 */
@@ -47,7 +47,7 @@ class PLSUtility {
 	}
 
 	/**
-	 * Retrieves the license storage map with decryption.
+	 * Retrieves the license storage map. Decrypts only when stored data is in legacy encrypted form.
 	 *
 	 * @return array<string, array{licenseIdStorageName?:string,activationKeyStorageName?:string}> The decrypted license storage map, or an empty array on failure.
 	 */
@@ -70,7 +70,9 @@ class PLSUtility {
 		if ( ! $decrypted_data ) {
 			return array();
 		}
-		return json_decode( $decrypted_data, true );
+
+		$decoded = json_decode( $decrypted_data, true );
+		return is_array( $decoded ) ? $decoded : array();
 	}
 
 	/**
