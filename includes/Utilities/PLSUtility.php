@@ -40,16 +40,9 @@ class PLSUtility {
 	/**
 	 * Stores the license storage map.
 	 *
-	 * @param array<string, array{
-	 *     downloadUrl:string,
-	 *     basename:string,
-	 *     provider:string,
-	 *     activationKeyStorageName:string,
-	 *     licenseIdStorageName:string,
-	 *     storageMethod:string
-	 * }> $storage_map
+	 * @param array<string, array{downloadUrl:string,basename:string,provider:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}> $storage_map License storage map keyed by plugin slug.
 	 */
-	public function store_license_storage_map( array $storage_map ) : void {
+	public function store_license_storage_map( array $storage_map ): void {
 		update_option( $this->license_storage_map_option_name, $storage_map );
 	}
 
@@ -57,16 +50,9 @@ class PLSUtility {
 	 * Retrieves the license storage map.
 	 * Decrypts only when stored data is in legacy encrypted form.
 	 *
-	 * @return array<string, array{
-	 *     downloadUrl?:string,
-	 *     basename?:string,
-	 *     provider?:string,
-	 *     activationKeyStorageName?:string,
-	 *     licenseIdStorageName?:string,
-	 *     storageMethod?:string
-	 * }>
+	 * @return array<string, array{licenseIdStorageName?:string,activationKeyStorageName?:string}> License storage map.
 	 */
-	public function retrieve_license_storage_map() : array {
+	public function retrieve_license_storage_map(): array {
 
 		$stored_data = get_option( $this->license_storage_map_option_name );
 
