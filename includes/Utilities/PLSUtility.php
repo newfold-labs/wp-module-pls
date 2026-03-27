@@ -38,37 +38,43 @@ class PLSUtility {
 	}
 
 	/**
-	 * Stores the license storage map with encryption.
+	 * Stores the license storage map.
 	 *
-	 * @param array<string, array{downloadUrl:string,basename:string,provider:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}> $storage_map The license storage map to be encrypted and stored, keyed by plugin slug.
+	 * @param array<string, array{downloadUrl:string,basename:string,provider:string,activationKeyStorageName:string,licenseIdStorageName:string,storageMethod:string}> $storage_map License storage map keyed by plugin slug.
 	 */
-	public function store_license_storage_map( array $storage_map ) {
-		// Initialize the encryption class and encrypt the storage map before storing it.
-		$encryption     = new Encryption();
-		$encrypted_data = $encryption->encrypt( wp_json_encode( $storage_map ) );
-		// Store the encrypted data in the WordPress options table.
-		update_option( $this->license_storage_map_option_name, $encrypted_data );
+	public function store_license_storage_map( array $storage_map ): void {
+		update_option( $this->license_storage_map_option_name, $storage_map );
 	}
 
 	/**
-	 * Retrieves the license storage map with decryption.
+	 * Retrieves the license storage map.
+	 * Decrypts only when stored data is in legacy encrypted form.
 	 *
-	 * @return array<string, array{licenseIdStorageName?:string,activationKeyStorageName?:string}> The decrypted license storage map, or an empty array on failure.
+	 * @return array<string, array{licenseIdStorageName?:string,activationKeyStorageName?:string}> License storage map.
 	 */
-	public function retrieve_license_storage_map() {
-		// Initialize the encryption class and retrieve the encrypted storage map from WordPress options.
-		$encryption     = new Encryption();
-		$encrypted_data = get_option( $this->license_storage_map_option_name );
-		// Return an empty array if no encrypted data is found.
-		if ( ! $encrypted_data ) {
+	public function retrieve_license_storage_map(): array {
+
+		$stored_data = get_option( $this->license_storage_map_option_name );
+
+		if ( empty( $stored_data ) ) {
 			return array();
 		}
-		// Decrypt the stored data and return it as an associative array.
-		$decrypted_data = $encryption->decrypt( $encrypted_data );
+
+		if ( is_array( $stored_data ) ) {
+			return $stored_data;
+		}
+
+		// Legacy encrypted JSON string
+		$encryption     = new Encryption();
+		$decrypted_data = $encryption->decrypt( $stored_data );
+
 		if ( ! $decrypted_data ) {
 			return array();
 		}
-		return json_decode( $decrypted_data, true );
+
+		$decoded = json_decode( $decrypted_data, true );
+
+		return is_array( $decoded ) ? $decoded : array();
 	}
 
 	/**
