@@ -10,6 +10,10 @@ on:
       - '**.php'
   workflow_dispatch:
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
@@ -18,6 +22,9 @@ jobs:
   phpcs:
     name: Run PHP Code Sniffer
     runs-on: ubuntu-latest
+    permissions:
+      contents: read        # Required for actions/checkout to clone the private repository.
+      pull-requests: read   # Required for technote-space/get-diff-action to resolve changed files via the pulls API on pull_request events.
     steps:
 
       - name: Checkout
