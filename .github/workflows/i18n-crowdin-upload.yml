@@ -12,6 +12,7 @@ jobs:
     uses: newfold-labs/workflows/.github/workflows/i18n-crowdin-upload.yml@main
     permissions:
       contents: read # Required for the reusable Crowdin upload workflow to clone the (private) caller repository.
+    timeout-minutes: 20
     with:
       CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
     secrets:
