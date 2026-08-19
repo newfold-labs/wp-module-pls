@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2025-02-13T10:54:39+00:00\n"
-"PO-Revision-Date: 2025-02-19 14:40\n"
+"PO-Revision-Date: 2026-08-18T14:01:56+00:00\n"
 "Language: it_IT\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-File: wp-module-pls.pot\n"
@@ -22,6 +22,14 @@ msgstr ""
 #: bootstrap.php:15
 msgid "wp-module-pls"
 msgstr "wp-module-pls"
+
+#: includes/RestApi/Controllers/PLSController.php:145
+msgid "License Valid"
+msgstr "Licenza valida"
+
+#: includes/RestApi/Controllers/PLSController.php:145
+msgid "License Invalid"
+msgstr "Licenza non valida"
 
 #: includes/Utilities/HiiveUtility.php:70
 msgid "Failed to connect to the API"
@@ -48,11 +56,3 @@ msgstr "ID licenza non trovato per il plugin."
 #: includes/Utilities/PLSUtility.php:314
 msgid "Unexpected response format from the API."
 msgstr "Formato di risposta inatteso dall'API."
-
-#: includes/RestApi/Controllers/PLSController.php:145
-msgid "License Valid"
-msgstr "Licenza valida"
-
-#: includes/RestApi/Controllers/PLSController.php:145
-msgid "License Invalid"
-msgstr "Licenza non valida"
