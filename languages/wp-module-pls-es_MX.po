@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2025-02-13T09:55:55+00:00\n"
-"PO-Revision-Date: 2026-08-18T14:01:56+00:00\n"
+"PO-Revision-Date: 2026-11-05T12:59:15+00:00\n"
 "Language: es_MX\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: wp-module-pls\n"
@@ -31,23 +31,23 @@ msgid "Failed to connect to the API"
 msgstr "No se pudo conectar con la API"
 
 #: includes/Utilities/HiiveUtility.php:107
-#: includes/Utilities/PLSUtility.php:299
+#: includes/Utilities/PLSUtility.php:305
 msgid "API returned a non-success status code: "
 msgstr "La API devolvió un código de estado no exitoso: "
 
-#: includes/Utilities/PLSUtility.php:215
+#: includes/Utilities/PLSUtility.php:221
 msgid "No license storage map found for the specified plugin slug."
 msgstr "No se encontró un mapa de almacenamiento de licencia para el identificador del plugin especificado."
 
-#: includes/Utilities/PLSUtility.php:226
+#: includes/Utilities/PLSUtility.php:232
 msgid "Provider is not set in the storage data."
 msgstr "El proveedor no está definido en los datos de almacenamiento."
 
-#: includes/Utilities/PLSUtility.php:242
-#: includes/Utilities/PLSUtility.php:270
+#: includes/Utilities/PLSUtility.php:248
+#: includes/Utilities/PLSUtility.php:276
 msgid "License ID not found for the plugin."
 msgstr "ID de licencia no encontrada para el plugin."
 
-#: includes/Utilities/PLSUtility.php:314
+#: includes/Utilities/PLSUtility.php:320
 msgid "Unexpected response format from the API."
 msgstr "Formato de respuesta inesperado de la API."
